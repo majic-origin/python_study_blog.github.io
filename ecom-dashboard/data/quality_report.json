@@ -1,0 +1,61 @@
+{
+  "steps": [
+    {
+      "step": "S1 字段规范化",
+      "action": "列名去空格 + 缺失列补齐",
+      "affected": 0,
+      "note": "共 17 个标准字段"
+    },
+    {
+      "step": "S2 时间解析",
+      "action": "非法时间剔除",
+      "affected": 61,
+      "note": "如 2026-13-45 这类脏值"
+    },
+    {
+      "step": "S3 主键去重",
+      "action": "按 order_id 去重",
+      "affected": 179,
+      "note": "埋点重复上报"
+    },
+    {
+      "step": "S5 缺失值处理",
+      "action": "分类填充「未知」+ 数值填充中位数",
+      "affected": 449,
+      "note": "再剔除 0 行无法归属维度的记录"
+    },
+    {
+      "step": "S6 逻辑校验",
+      "action": "负销量取绝对值",
+      "affected": 90,
+      "note": "录入符号错误"
+    },
+    {
+      "step": "S6 逻辑校验",
+      "action": "金额与明细不一致则重算",
+      "affected": 59,
+      "note": "单价×数量×折扣"
+    },
+    {
+      "step": "S7 异常值处理",
+      "action": "分品类 IQR 上界缩尾",
+      "affected": 1034,
+      "note": "保留大单，避免误删真实峰值"
+    },
+    {
+      "step": "S8 特征衍生",
+      "action": "新增 11 个分析字段",
+      "affected": 0,
+      "note": "日期/时段/利润/毛利率/状态标记"
+    }
+  ],
+  "raw_rows": 15180,
+  "clean_rows": 14940,
+  "drop_rows": 240,
+  "keep_ratio": 98.42,
+  "time_range": [
+    "2026-01-01 00:12:13",
+    "2026-09-30 23:35:31"
+  ],
+  "missing_cells_before": 449
+}

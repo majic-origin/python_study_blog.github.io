@@ -1,0 +1,9 @@
+# 核心依赖（Python 3.10+ 均可，开发环境为 Python 3.12 + Streamlit 1.66）
+streamlit>=1.40
+pandas>=2.0
+numpy>=1.24
+plotly>=5.20
+openpyxl>=3.1          # 导出/读取 Excel
+
+# 可选：把图表导出为 PNG 时需要（不装不影响看板运行，导出按钮会给出降级提示）
+# kaleido>=0.2
