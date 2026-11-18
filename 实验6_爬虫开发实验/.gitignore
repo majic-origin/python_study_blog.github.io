@@ -1,0 +1,19 @@
+# 浏览器内核与下载包（体积大，不入库）
+.browsers/
+*.zip
+
+# 运行产物
+result*.csv
+metrics_*.json
+compare.md
+!示例/results/*.csv
+!示例/results/*.json
+!示例/results/compare.md
+
+# 中间日志
+_metrics/
+*.log
+
+# Python
+__pycache__/
+*.py[cod]

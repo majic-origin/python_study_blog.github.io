@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>动态站 · 客户端渲染</title></head>
+<body>
+<h1>城市观察 · 动态版</h1>
+<!-- 服务端只返回这个空壳，数据由 JS 请求接口后渲染 -->
+<div id="app"></div>
+<script>
+fetch('/api/list.json?page=1')
+  .then(function (r) { return r.json(); })
+  .then(function (d) {
+    var ul = document.createElement('ul');
+    ul.className = 'news-list';
+    d.data.list.forEach(function (it) {
+      var li = document.createElement('li');
+      li.className = 'news-item';
+      var date = new Date(it.publishTime).toISOString().slice(0, 10);
+      li.innerHTML = '<h3><a href="' + it.link + '">' + it.title + '</a></h3>'
+                   + '<span class="meta">' + date + ' · 记者：' + it.author + '</span>';
+      ul.appendChild(li);
+    });
+    document.getElementById('app').appendChild(ul);
+  });
+</script>
+</body>
+</html>

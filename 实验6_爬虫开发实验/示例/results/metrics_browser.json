@@ -1,0 +1,13 @@
+{
+  "scheme": "B_browser",
+  "url": "http://127.0.0.1:8899/spa_live.html",
+  "pages": 1,
+  "rows": 5,
+  "elapsed_sec": 5.87,
+  "sec_per_page": 5.87,
+  "peak_rss_mb": 640.3,
+  "bytes_total": 1809,
+  "blocked_assets": true,
+  "missing_time": 0,
+  "missing_author": 0
+}

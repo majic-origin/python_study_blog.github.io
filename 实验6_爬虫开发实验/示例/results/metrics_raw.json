@@ -1,0 +1,57 @@
+{
+  "generated_at": "2026-11-18 17:38:16",
+  "page_url": "http://127.0.0.1:8899/spa_live.html",
+  "api": "http://127.0.0.1:8899/api/list.json?page=1",
+  "pages": 1,
+  "rounds": 1,
+  "schemes": {
+    "A_api": {
+      "label": "A 接口逆向",
+      "runs": [
+        {
+          "sec": 0.57,
+          "peak_mb": 48.8,
+          "rc": 0,
+          "tail": [
+            "成功抓取 5 条 -> D:\\WorkBuddy_programm_data\\ai实验报告完成\\爬虫实验\\示例\\results\\_metrics\\result_api.csv   累计传输 0.9 KB",
+            "耗时 0.01s",
+            "指标已写入 D:\\WorkBuddy_programm_data\\ai实验报告完成\\爬虫实验\\示例\\results\\_metrics\\metrics_api.json"
+          ],
+          "rows": 5
+        }
+      ],
+      "median_sec": 0.57,
+      "median_peak_mb": 48.8,
+      "sec_per_page": 0.57,
+      "rows": 5,
+      "stability": "1/1",
+      "bytes_total": 894,
+      "loc": 264,
+      "deps": "requests, beautifulsoup4, lxml"
+    },
+    "B_browser": {
+      "label": "B 浏览器渲染",
+      "runs": [
+        {
+          "sec": 6.53,
+          "peak_mb": 636.4,
+          "rc": 0,
+          "tail": [
+            "成功抓取 5 条 -> D:\\WorkBuddy_programm_data\\ai实验报告完成\\爬虫实验\\示例\\results\\_metrics\\result_browser.csv",
+            "耗时 5.7s / 峰值内存 626 MB / 传输 2 KB",
+            "指标已写入 D:\\WorkBuddy_programm_data\\ai实验报告完成\\爬虫实验\\示例\\results\\_metrics\\metrics_browser.json"
+          ],
+          "rows": 5
+        }
+      ],
+      "median_sec": 6.53,
+      "median_peak_mb": 636.4,
+      "sec_per_page": 6.53,
+      "rows": 5,
+      "stability": "1/1",
+      "bytes_total": 1809,
+      "loc": 243,
+      "deps": "playwright, beautifulsoup4, lxml, psutil"
+    }
+  }
+}

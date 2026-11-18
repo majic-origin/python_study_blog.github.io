@@ -1,0 +1,15 @@
+{
+  "code": 0,
+  "msg": "ok",
+  "total": 128,
+  "has_more": true,
+  "data": {
+    "list": [
+      {"id": 3001, "title": "接口文章一：轨道上的都市圈", "publishTime": 1794412800000, "author": "记者甲", "link": "/p/3001.html"},
+      {"id": 3002, "title": "接口文章二：产业园空置率调查", "publishTime": 1794326400000, "author": "记者乙", "link": "/p/3002.html"},
+      {"id": 3003, "title": "接口文章三：学位供给三年账本", "publishTime": 1794240000000, "author": "记者丙", "link": "https://example.com/p/3003.html"},
+      {"id": 3004, "title": "接口文章四：老旧管网改造进度", "publishTime": 1794153600000, "author": "记者丁", "link": "/p/3004.html"},
+      {"id": 3005, "title": "接口文章五：夜间公交线路评估", "publishTime": 1794067200000, "author": "记者戊", "link": "/p/3005.html"}
+    ]
+  }
+}
