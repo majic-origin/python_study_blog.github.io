@@ -61,7 +61,7 @@ https://cdn.npmmirror.com/binaries/chrome-for-testing/159.0.8154.6/win64/chrome-
 ### Git Bash
 
 ```bash
-mkdir -p 爬虫实验/.browsers && cd 爬虫实验/.browsers
+mkdir -p .browsers && cd .browsers
 curl -L -C - --retry 3 -o chrome-win64.zip \
   "https://cdn.npmmirror.com/binaries/chrome-for-testing/159.0.8154.6/win64/chrome-win64.zip"
 unzip -q chrome-win64.zip
@@ -96,8 +96,8 @@ Expand-Archive chrome-win64.zip -DestinationPath .
 本机已有 Chrome 或 Edge 时，Playwright 可以直接驱动它，只是版本不完全可控：
 
 ```bash
-python browser_crawler.py <URL> --channel chrome
-python browser_crawler.py <URL> --channel msedge
+python run.py 渲染 <URL> --channel chrome
+python run.py 渲染 <URL> --channel msedge
 ```
 
 做实验、交作业足够用；要严格复现某个内核行为时才需要自带 chromium。
@@ -109,15 +109,15 @@ python browser_crawler.py <URL> --channel msedge
 ### 4.1 推荐：`--exe` 直接指路径
 
 ```bash
-python browser_crawler.py "http://127.0.0.1:8899/spa_live.html" \
-  --exe "爬虫实验/.browsers/chrome-win64/chrome.exe"
+python run.py 渲染 "http://127.0.0.1:8899/spa_live.html" \
+  --exe ".browsers/chrome-win64/chrome.exe"
 ```
 
 也可以设环境变量，避免每次敲长路径：
 
 ```bash
-export BROWSER_EXE="$PWD/爬虫实验/.browsers/chrome-win64/chrome.exe"
-python browser_crawler.py <URL>
+export BROWSER_EXE="$PWD/.browsers/chrome-win64/chrome.exe"
+python run.py 渲染 <URL>
 ```
 
 脚本里对应的就是这一句：
@@ -138,16 +138,16 @@ browser = pw.chromium.launch(headless=True, executable_path=exe)
 
 ```bash
 # 1) 文件在不在、多大
-ls -l 爬虫实验/.browsers/chrome-win64.zip        # 应该 217364368 左右
+ls -l .browsers/chrome-win64.zip        # 应该 217364368 左右
 
 # 2) exe 能不能起来
-爬虫实验/.browsers/chrome-win64/chrome.exe --version
+.browsers/chrome-win64/chrome.exe --version
 
 # 3) Playwright 能不能驱动它
 python -c "
 from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
-    b = p.chromium.launch(headless=True, executable_path='爬虫实验/.browsers/chrome-win64/chrome.exe')
+    b = p.chromium.launch(headless=True, executable_path='.browsers/chrome-win64/chrome.exe')
     pg = b.new_page(); pg.set_content('<h1>ok</h1>')
     print('version =', b.version); print('text =', pg.inner_text('h1'))
     b.close()
@@ -183,7 +183,7 @@ with sync_playwright() as p:
 | 版本 | `Google Chrome for Testing 159.0.8154.6`（与 browsers.json 要求完全一致） |
 | 跑脚本 | `browser_crawler.py --exe ...` → 5 条，6.0s，峰值 633MB |
 
-落盘位置：`爬虫实验/.browsers/chrome-win64/`（207MB 的 zip 可删）。
+落盘位置：`.browsers/chrome-win64/`（207MB 的 zip 可删）。
 
 ---
 
@@ -195,4 +195,4 @@ with sync_playwright() as p:
 | `.browsers/chrome-win64/` | 约 320 MB | 解压后的内核 |
 | `%LOCALAPPDATA%\ms-playwright\` | 每个内核 150–320 MB | 官方安装位置，可整体删 |
 
-删掉不影响方案 A（`api_crawler.py` 纯 requests，不需要浏览器）。
+删掉不影响方案 A（`src/api_crawler.py` 纯 requests，不需要浏览器）。
