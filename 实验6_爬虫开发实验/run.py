@@ -9,6 +9,7 @@
     python run.py 渲染 <URL>               动态页面，用浏览器渲染
     python run.py 对比                     双方案测量出对比表
     python run.py 文档                     列出所有文档路径
+    python run.py 菜单                     交互菜单（双击 一键运行.bat 等同此命令）
 
 英文别名同样可用：doctor / demo / basic / api / render / compare / docs
 """
@@ -45,6 +46,7 @@ ALIAS = {
     "渲染": "render", "动态": "render", "浏览器": "render",
     "对比": "compare", "测量": "compare",
     "文档": "docs", "说明": "docs",
+    "菜单": "menu", "交互": "menu",
 }
 
 
@@ -171,11 +173,102 @@ def cmd_docs() -> int:
     return 0
 
 
+# ------------------------------------------------------------------ 交互菜单
+MENU = """
+============================================================
+  爬虫实验 · 菜单          （Ctrl+C 或 0 退出）
+============================================================
+   1  环境检查（依赖 / 浏览器内核）
+   2  一键演示（本地样例，不联网，约 30 秒）
+   3  抓静态列表页          -> result.csv
+   4  抓接口 / 动态页面      （自动嗅探，方案 A）
+   5  渲染动态页面          （浏览器，方案 B）
+   6  双方案对比            -> compare.md
+   7  查看文档清单
+   0  退出
+============================================================
+"""
+
+
+def _ask(prompt: str):
+    """读一行输入；遇到 EOF（管道 / 双击关窗口）返回 None。"""
+    try:
+        return input(prompt).strip()
+    except EOFError:
+        return None
+
+
+def _pause():
+    try:
+        input("\n按回车回到菜单...")
+        return True
+    except EOFError:
+        return False
+
+
+def cmd_menu() -> int:
+    while True:
+        print(MENU)
+        choice = _ask("请输入序号后回车: ")
+        if choice is None or choice in ("0", "q", "quit", "exit"):
+            print("已退出。")
+            return 0
+
+        try:
+            if choice == "1":
+                cmd_doctor()
+            elif choice == "2":
+                cmd_demo(1)
+            elif choice == "3":
+                url = _ask("列表页 URL（直接回车跳过）: ")
+                if url:
+                    call("crawler_core", [url, "-o", "result.csv"])
+                    print("\n输出文件: result.csv")
+            elif choice == "4":
+                url = _ask("页面 URL（直接回车跳过）: ")
+                if url:
+                    call("api_crawler", ["--sniff", url, "-o", "result_api.csv"])
+                    print("\n输出文件: result_api.csv")
+            elif choice == "5":
+                url = _ask("页面 URL（直接回车跳过）: ")
+                if url:
+                    call("browser_crawler", [url, "-o", "result_browser.csv"])
+                    print("\n输出文件: result_browser.csv")
+            elif choice == "6":
+                page = _ask("页面 URL: ")
+                api = _ask("接口 URL（回车则由脚本自动嗅探）: ")
+                if page:
+                    argv = ["--page-url", page, "--rounds", "3"]
+                    if api:
+                        argv += ["--api", api]
+                    call("metrics", argv)
+                    print("\n输出文件: compare.md / metrics_raw.json")
+            elif choice == "7":
+                cmd_docs()
+            else:
+                print("没有这个序号，输入 1–7 或 0。")
+        except KeyboardInterrupt:
+            print("\n已中断。")
+            return 0
+        except Exception as e:                      # 单个任务失败不应炸掉菜单
+            print(f"\n[!] 这一步出错: {type(e).__name__}: {e}")
+
+        if not _pause():
+            return 0
+
+
 # ------------------------------------------------------------------ 主入口
 HELP = __doc__
 
 
 def main() -> int:
+    # 输出重定向到文件时（编码非 UTF-8）避免个别符号触发 UnicodeEncodeError
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(errors="replace")
+        except Exception:
+            pass
+
     if len(sys.argv) < 2 or sys.argv[1] in ("-h", "--help", "help"):
         print(HELP)
         return 0
@@ -192,6 +285,8 @@ def main() -> int:
         return cmd_demo(rounds)
     if cmd == "docs":
         return cmd_docs()
+    if cmd == "menu":
+        return cmd_menu()
     if cmd == "basic":
         if not rest:
             print("用法: python run.py 基础 <URL> [-o 输出.csv] [--pages N]")
