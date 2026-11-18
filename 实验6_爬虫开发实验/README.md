@@ -98,3 +98,23 @@ CSV 一律 `utf-8-sig`、列序 `title,time,author,url`，Excel 双击直接开�
 | 传输量 | 0.9 KB | 1.8 KB |
 
 **能拿到 JSON 就别开浏览器。** 8 倍耗时、12 倍内存就是这句话的价格。
+
+## 发布到 GitHub
+
+仓库：`https://github.com/majic-origin/python_study_blog.github.io.git`
+本目录对应该仓库里的 `实验6_爬虫开发实验/`。
+
+```bash
+git clone https://github.com/majic-origin/python_study_blog.github.io.git blogrepo
+cd blogrepo
+# 把本地改动同步进去（排除体积大的内核与运行产物）
+rsync -a --delete \
+  --exclude '.browsers' --exclude '__pycache__' --exclude '_metrics' \
+  "../ai实验报告完成/爬虫实验/" "实验6_爬虫开发实验/"
+git add -A && git commit -m "更新实验6" && git push
+```
+
+不想用 rsync 的话，直接把 `爬虫实验/` 整个复制覆盖 `blogrepo/实验6_爬虫开发实验/` 即可。
+
+`.gitignore` 已经排除：`.browsers/`（660MB 内核）、`_metrics/`（日志）、`__pycache__/`，`示例/results/` 里的 CSV 与对比表则保留入库，方便别人直接看结果。
+
